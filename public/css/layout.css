@@ -1,5 +1,6 @@
 .my-card-body{
     height: calc( 100vh - (55px + 48px) );
+    width: calc(100vw - calc(100vw - 100%));
 }
 
 

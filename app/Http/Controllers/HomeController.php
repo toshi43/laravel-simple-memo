@@ -7,6 +7,7 @@ use App\Models\Memo;
 use App\Models\Tag;
 use App\Models\MemoTag;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {

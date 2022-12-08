@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FolderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,5 @@ Route::post('/store', [HomeController::class, 'store'])->name('store');
 Route::get('/edit/{id}', [HomeController::class, 'edit'])->name('edit');
 Route::post('/update', [HomeController::class, 'update'])->name('update');
 Route::post('/destory', [HomeController::class, 'destory'])->name('destory');
+Route::get('/folders/formcreate', [FolderController::class, 'showCreateForm'])->name('folders/formcreate');
+Route::post('/folders/formcreate', [FolderController::class, 'create']);
