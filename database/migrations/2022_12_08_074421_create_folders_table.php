@@ -15,7 +15,7 @@ class CreateFoldersTable extends Migration
     {
         Schema::create('folders', function (Blueprint $table) {
             $table->unsignedBigInteger('id', true);
-            $table->longText('content');
+            $table->string('title', 20);
             $table->unsignedBigInteger('user_id');
             $table->softDeletes();
             //論理削除を定義→deleted_atを自動生成

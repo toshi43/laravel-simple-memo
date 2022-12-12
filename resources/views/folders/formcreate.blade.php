@@ -31,6 +31,7 @@
                     <nav class="panel panel-default">
                         <div class="panel-heading">フォルダを追加する</div>
                         <div class="panel-body">
+                        <!--
                             @if($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
@@ -40,6 +41,7 @@
                                     </ul>
                                 </div>
                             @endif
+-->
                             <form action="{{ route('folders/formcreate') }}" method="post">
                                 @csrf
                                 <div class="form-group">

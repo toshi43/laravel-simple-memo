@@ -94,7 +94,11 @@
                 
                 <div class="col-md-4 p-0">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between">メモ一覧<a href="{{ route('folders/formcreate') }}" class="btn btn-default btn-block"><i class="fas fa-folder"></i></a><a href="{{ route('home') }}"><i class="fas fa-plus-circle"></i></a></div>
+                        <div class="card-header d-flex justify-content-between">
+                            メモ一覧
+                            <a href="{{ route('folders/formcreate') }}" class="btn-block"><i class="fas fa-folder"></i></a>
+                            <a href="{{ route('home') }}"><i class="fas fa-plus-circle"></i></a>
+                        </div>
                         <div class="card-body my-card-body">
                         @foreach($memos as $memo)
                             <a href="/edit/{{$memo['id']}}" class = "card-text d-block elipsis mb-3">{{ $memo['content'] }}</a>
