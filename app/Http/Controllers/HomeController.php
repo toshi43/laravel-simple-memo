@@ -34,6 +34,11 @@ class HomeController extends Controller
         return view('create', compact('tags'));
     }
 
+    public function folders()
+    {
+        return "Hello world";
+    }
+
     public function store(Request $request)
     {
         $posts = $request->all();
