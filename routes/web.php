@@ -25,4 +25,4 @@ Route::post('/update', [HomeController::class, 'update'])->name('update');
 Route::post('/destory', [HomeController::class, 'destory'])->name('destory');
 Route::get('/folders/formcreate', [FolderController::class, 'showCreateForm'])->name('folders/formcreate');
 Route::post('/folders/formcreate', [FolderController::class, 'create']);
-Route::get('/folders/{id} ', [HomeController::class, 'folders'])->name('folders');
+Route::get('/folders/{id}', [HomeController::class, 'folders'])->name('folders.index');

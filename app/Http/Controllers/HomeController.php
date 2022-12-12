@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Memo;
 use App\Models\Tag;
 use App\Models\MemoTag;
+use App\Models\Folder;
+
 use DB;
 use Illuminate\Support\Facades\Log;
 
@@ -31,13 +33,19 @@ class HomeController extends Controller
         $tags = Tag::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')
         ->get();
 
-        return view('create', compact('tags'));
+        $folders = Folder::all();
+
+        return view('create', compact('tags' , 'folders'));
     }
 
-    public function folders()
-    {
-        return "Hello world";
-    }
+    // public function folders(Request $request)
+    // {
+    //         $folders = Folder::all();
+
+    //         return view('layouts/app', [
+    //             'folders' => $folders,
+    //         ]);
+    // }
 
     public function store(Request $request)
     {
@@ -89,7 +97,9 @@ class HomeController extends Controller
         $tags = Tag::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')
         ->get();
 
-        return view('edit', compact('edit_memo', 'include_tags','tags'));
+        $folders = Folder::all();
+
+        return view('edit', compact('edit_memo', 'include_tags', 'tags', 'folders'));
     }
 
     public function update(Request $request)

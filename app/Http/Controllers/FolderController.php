@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Folder;
+use App\Models\Memo;
+
 
 class FolderController extends Controller
 {

@@ -82,21 +82,22 @@
             <div class="row">
                 <div class="co-sm-12 col-md-4 p-0">
                     <div class="card">
-                        <div class="card-header">タグ一覧</div>
+                        <div class="card-header d-flex justify-content-between">
+                            フォルダ一覧
+                            <a href="{{ route('folders/formcreate') }}" class="btn-block"><i class="fas fa-folder"></i></a>
+                        </div>
                         <div class="card-body my-card-body">
                                 <a href="/" class = "card-text d-block mb-3">全て表示</a>
-                            @foreach($tags as $tag)
-                                <a href="/?tag={{$tag['id']}}" class = "card-text d-block elipsis mb-3">{{ $tag['name'] }}</a>
+                            @foreach($folders as $folder)
+                                <a href="{{ route('folders.index', ['id' => $folder->id]) }}" class="list-group-item">{{ $folder->title }}</a>
                             @endforeach
                         </div>
                     </div>
-                </div>
-                
+                </div>                
                 <div class="col-md-4 p-0">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             メモ一覧
-                            <a href="{{ route('folders/formcreate') }}" class="btn-block"><i class="fas fa-folder"></i></a>
                             <a href="{{ route('home') }}"><i class="fas fa-plus-circle"></i></a>
                         </div>
                         <div class="card-body my-card-body">
@@ -108,6 +109,17 @@
                 </div>
                 <div class="col-md-4 p-0">
                     @yield('content')
+                </div>
+                <div class="co-sm-12 col-md-4 p-0">
+                    <div class="card">
+                        <div class="card-header">タグ一覧</div>
+                        <div class="card-body my-card-body">
+                                <a href="/" class = "card-text d-block mb-3">全て表示</a>
+                            @foreach($tags as $tag)
+                                <a href="/?tag={{$tag['id']}}" class = "card-text d-block elipsis mb-3">{{ $tag['name'] }}</a>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
