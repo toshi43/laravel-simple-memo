@@ -18,10 +18,12 @@ class CreateMemosTable extends Migration
             $table->longText('content');
             $table->unsignedBigInteger('user_id');
             $table->softDeletes();
+            $table->unsignedBigInteger('folder_id');
             //論理削除を定義→deleted_atを自動生成
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->timestamp('create_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->foreign('user_id')->references('id')->on('users');
+            //$table->foreign('folder_id')->references('id')->on('folders');
         });
     }
 

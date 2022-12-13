@@ -89,7 +89,7 @@
                         <div class="card-body my-card-body">
                                 <a href="/" class = "card-text d-block mb-3">全て表示</a>
                             @foreach($folders as $folder)
-                                <a href="{{ route('folders.index', ['id' => $folder->id]) }}" class="list-group-item">{{ $folder->title }}</a>
+                                <a href="{{ route('index', ['folder_id' => $folder->id]) }}" class="list-group-item">{{ $folder->title }}</a>
                             @endforeach
                         </div>
                     </div>

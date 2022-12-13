@@ -28,24 +28,35 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $tags = Tag::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')
         ->get();
 
         $folders = Folder::all();
+        $folder_id = $request->input('folder_id');
+        //Log::info($folder_id);
+        $current_folder = Folder::find($folder_id);
+        //選ばれたフォルダに紐づくタスクを取得する
+        $memos = Memo::where('folder_id', $current_folder->id)->get();
+        
 
-        return view('create', compact('tags' , 'folders'));
+        //folder_idがNullの場合
+
+        // if($current_folder === null) {
+        //     return redirect( route('home') );
+        // }
+
+        return view('create', compact('tags' , 'folders',
+        [
+            'folders' => $folders,
+            'current_folder_id' => $current_folder->id,
+            'memos' => $memos,
+        ]
+
+        
+        ));
     }
-
-    // public function folders(Request $request)
-    // {
-    //         $folders = Folder::all();
-
-    //         return view('layouts/app', [
-    //             'folders' => $folders,
-    //         ]);
-    // }
 
     public function store(Request $request)
     {
@@ -73,8 +84,6 @@ class HomeController extends Controller
                 }
             }
         });
-
-        //Memo::insert(['content' => $posts['content'], 'user_id' => \Auth::id()]);
 
         return redirect( route('home') );
     }
