@@ -7,24 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Folder extends Model
 {
-    use HasFactory;
+    use HasFactory;   
 
-    public function getMyfolder(){
-        $query_folder = \Request::query('folder');
-
-        $query = Folder::query()->select('folders.*')
-                ->where('user_id', '=', \Auth::id())
-                ->whereNull('deleted_at')
-                ->oder_by('updated_at' , 'DESK');
-
-        if( !empty($query_folder) ){
-            $query  ->leftJoin('meomo_folders', 'memo_folders.memo_id', '=', 'folders.id')
-                    ->where('memo_folders.folder_id', '=', $query_folder);
-        }
-        
-        $folders = $query->get();
-        
-        return $folders;
+    // 1対多の関係で紐づくメモをすべて取得
+    public function memos()
+    {
+        return $this->hasMany(Memo::class);
     }
-    
 }

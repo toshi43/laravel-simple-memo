@@ -30,15 +30,24 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+
         $tags = Tag::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')
         ->get();
 
-        $folders = Folder::all();
+        //$folders = Folder::all();
+        
+        $folders = Folder::where('user_id', '=', \Auth::id())
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'DESC')
+            ->get();
+        
         $folder_id = $request->input('folder_id');
+        // $memos = Folder::find($folder_id)->memos;
+
         //Log::info($folder_id);
-        $current_folder = Folder::find($folder_id);
+        //$current_folder = Folder::find($folder_id);
         //選ばれたフォルダに紐づくタスクを取得する
-        $memos = Memo::where('folder_id', $current_folder->id)->get();
+        //$memos = Memo::where('folder_id', $current_folder->id)->get();
         
 
         //folder_idがNullの場合
@@ -47,12 +56,9 @@ class HomeController extends Controller
         //     return redirect( route('home') );
         // }
 
-        return view('create', compact('tags' , 'folders',
-        [
-            'folders' => $folders,
-            'current_folder_id' => $current_folder->id,
-            'memos' => $memos,
-        ]
+
+
+        return view('create', compact('tags' , 'folders'
 
         
         ));
@@ -62,13 +68,16 @@ class HomeController extends Controller
     {
         $posts = $request->all();
         $request->validate( [ 'content' => 'required']);
-
         //ここからトランザクション開始
         DB::transaction(function() use($posts) {
         //　メモIDをインサートして取得
-            $memo_id = Memo::insertGetId(['content' => $posts['content'], 'user_id' => \Auth::id()]);
+            $memo_id = Memo::insertGetId(['content' => $posts['content'], 'user_id' => \Auth::id(), 'folder_id' => $posts['selectfolder_id']]);
+            $folder_exists = Memo::where('user_id' ,'=' , \Auth::id())
+            ->exists();
             $tag_exists = Tag::where('user_id' ,'=' , \Auth::id())->where('name', '=', $posts['new_tag'])
             ->exists();
+            
+           // Memo::insert(['folder_id' => $folder_id]);
         //新規タグが入力されているかチェック
         //新規タグが既にtagsテーブルに存在するかのチェック
             if( !empty($posts['new_tag']) && !$tag_exists ){
@@ -85,30 +94,47 @@ class HomeController extends Controller
             }
         });
 
+        // return view('create', compact('folders'
+        // [
+        //      $folder = Folder::find($folder_id)
+        //  ]));
+       
         return redirect( route('home') );
     }
 
     public function edit($id)
     {
-        $edit_memo = Memo::select('memos.*', 'tags.id AS tag_id')
-            ->leftJoin('memo_tags', 'memo_tags.memo_id', '=', 'memos.id')
-            ->leftJoin('tags', 'memo_tags.tag_id', '=', 'tags.id')
-            ->where('memos.user_id', '=', \Auth::id())
-            ->where('memos.id', '=', $id)
-            ->whereNull('memos.deleted_at')
-            ->get();
+        $edit_memo = Memo::find($id);
+        
+
+        // $edit_memo = Memo::select('memos.*', 'tags.id AS tag_id')
+        //     ->leftJoin('memo_tags', 'memo_tags.memo_id', '=', 'memos.id')
+        //     ->leftJoin('tags', 'memo_tags.tag_id', '=', 'tags.id')
+        //     ->where('memos.user_id', '=', \Auth::id())
+        //     ->where('memos.id', '=', $id)
+        //     ->whereNull('memos.deleted_at')
+        //     ->get();
+
+        //リレーションで取得
+        $tags = $edit_memo->tags;
+        $include_folder = $edit_memo->folder;
+
 
         $include_tags = [];
-        foreach($edit_memo as $memo){
-            array_push($include_tags, $memo['tag_id']);
+        // リレーションで紐づいたタグのIDを取得
+        foreach($tags as $tag){
+            array_push($include_tags, $tag['id']);
         }
+
+        Log::info($include_folder);
+       
+
 
         $tags = Tag::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')
         ->get();
-
-        $folders = Folder::all();
-
-        return view('edit', compact('edit_memo', 'include_tags', 'tags', 'folders'));
+        $folders = Folder::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')
+        ->get();
+        return view('edit', compact('edit_memo', 'include_tags', 'tags', 'folders', 'include_folder'));
     }
 
     public function update(Request $request)
@@ -117,7 +143,7 @@ class HomeController extends Controller
         $request->validate( [ 'content' => 'required']);
         //トランザクションスタート
         DB::transaction(function() use($posts){
-            Memo::where('id', $posts['memo_id'])->update(['content' => $posts['content']]);
+            Memo::where('id', $posts['memo_id'])->update(['content' => $posts['content'], 'folder_id' => $posts['selectfolder_id']]);
             //一旦メモとタグの紐付けを解除
             MemoTag::where('memo_id', '=', $posts['memo_id'])->delete();
             //再度メモとタグの紐付け
@@ -149,6 +175,15 @@ class HomeController extends Controller
         
         //Memo::where('id', $posts['memo_id'])->deleate();←NGこれをやると物理削除
         Memo::where('id', $posts['memo_id'])->update(['deleted_at' => date("Y-m-d H:i:s", time())]);
+        
+        return redirect( route('home') );
+    }
+
+    public function folderdestory(Request $request)
+    {
+        $posts = $request->all();
+        
+        Folder::where('id', $posts['folder_id'])->update(['deleted_at' => date("Y-m-d H:i:s", time())]);
         
         return redirect( route('home') );
     }
