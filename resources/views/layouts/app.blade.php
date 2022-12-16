@@ -88,13 +88,14 @@
                         </div>
                         <div class="card-body my-card-body">
                                 <a href="/" class = "card-text d-block mb-3">全て表示</a>
-                            @foreach($folders as $folder)
-                            <div class="fokder-list d-flex justify-content-between" action="{{ route('folderdestroy') }}" method="POST">
+                            {{-- @foreach($folders as $folder) --}}
+                            <div class="fokder-list d-flex justify-content-between" method="POST">
                                 <a href="/?folder_id={{$folder['id']}}" class="list-group-item elipsis mb-3">{{ $folder['title'] }}</a>
-                                <i class="fas fa-trash mr-3" onclick="deleteHandle(event);"></i>
+                                {{-- <form id="folderdelete-form" action="{{ route('folderdestroy',['folder_id'=>$folder->'id']) }}" method="POST"> --}}
+                                <a href="/folders/{{$folder['id']}}/edit"><i class="fas fa-edit"></i></a>
+                                </form>
                             </div>
-                                <!-- <a href="{{ route('index', ['folder_id' => $folder->id]) }}" class="list-group-item  mb-3">{{ $folder->title }}</a> -->
-                            @endforeach
+                            {{-- @endforeach --}}
                         </div>
                     </div>
                 </div>                

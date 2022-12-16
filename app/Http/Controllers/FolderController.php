@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Folder;
 use App\Models\Memo;
 use App\Http\Requests\CreateFolder;
+use App\Http\Requests\EditFolder;
 
 
 class FolderController extends Controller
@@ -28,6 +29,13 @@ class FolderController extends Controller
             'id' => $folder->id
         ]);
     }
+
+    // public function folderedit($id)
+    //  {
+    //     $folder = Folder::find($id);
+    
+    //     return view('folderedit');
+    // }
 }
 
 
