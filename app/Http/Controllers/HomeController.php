@@ -179,12 +179,37 @@ class HomeController extends Controller
         return redirect( route('home') );
     }
 
-    public function folderdestory(Request $request)
+    public function folderedit($id)
+    {
+        $folder = Folder::find($id);
+        
+        return view('folders/folderedit', compact('folder'));
+    }
+
+    public function folderupdate(Request $request)
     {
         $posts = $request->all();
-        
-        Folder::where('id', $posts['folder_id'])->update(['deleted_at' => date("Y-m-d H:i:s", time())]);
-        
-        return redirect( route('home') );
+        $request->validate( [ 'content' => 'required']);
+
+         //トランザクションスタート
+         DB::transaction(function() use($posts){
+            Folder::where('id', $posts['folder_id'])->update(['title' => $posts['title']]);
+            //一旦フォルダととメモの紐付けを解除
+            Memo::where('folder_id', '=', $posts['folder_id'])->delete();
+            //再度フォルダとメモの紐付け
+            foreach ($posts['tags'] as $tag) {
+                Memo::insert(['folder_id' => $posts['folder_id']]);
+            }
+         });
+        return view('folders/folderedit');
     }
+
+//     public function folderdestory($id)
+//     {
+//         $folder = Folder::find($id);
+        
+//         Folder::where('id', $folder['folder_id'])->update(['deleted_at' => date("Y-m-d H:i:s", time())]);
+        
+//         return redirect( route('home') );
+//     }
 }
