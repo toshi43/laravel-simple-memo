@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Memo;
 use App\Models\Tag;
+use App\Models\Folder;
+use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,8 +33,19 @@ class AppServiceProvider extends ServiceProvider
             //インスタンス化
             $memo_model = new Memo();
             //メモ取得
-            $memos = $memo_model ->getMyMemo();
+
+            $request = request();
+            $folder_id = $request->input('folder_id');
+            if($folder_id){
+                $memos = Folder::find($folder_id)->memos;
+            } else {
+                $memos = $memo_model->where('user_id', '=', \Auth::id())->get();
+            }
             
+    
+            $current_folder = Folder::find($folder_id);
+            // $memos = Memo::where('folder_id', $current_folder->id)->get();
+
             $tags = Tag::where('user_id', '=', \Auth::id())
                 ->whereNull('deleted_at')
                 ->orderBy('id', 'DESC')

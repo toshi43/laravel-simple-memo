@@ -10,15 +10,29 @@
         メモ編集
         <form id="delete-form" action="{{ route('destory') }}" method="POST">
             @csrf
-            <input type="hidden"  name="memo_id" value="{{ $edit_memo[0]['id'] }}" />
+            <input type="hidden"  name="memo_id" value="{{ $edit_memo['id'] }}" />
             <i class="fas fa-trash mr-3" onclick="deleteHandle(event);"></i>
         </form>
     </div>
     <form class="card-body  my-card-body" action="{{ route('update') }}" method="POST">
         @csrf
-        <input type="hidden"  name="memo_id" value="{{ $edit_memo[0]['id']}}" />
+
+        <!-- フォルダー選択プルダウン 初期値 -->
+       <div class="form-group">
+            <select class="form-control mb-3" name="selectfolder_id">
+                <option></option>
+                @foreach ($folders as $folder)
+                    <option value="{{ $folder['id'] }}" @if($folder['id'] == $edit_memo['folder_id']) selected @endif>{{ $folder->title }}</option>
+                @endforeach
+            </select>
+        </div>
+        <!-- フォルダー選択プルダウン　初期値 -->
+
+        
+
+        <input type="hidden"  name="memo_id" value="{{ $edit_memo['id']}}" />
         <div class="form-group">
-            <textarea class="form-control mb-3" name="content" rows="3" placeholder="ここにメモを入力">{{ $edit_memo[0]['content'] }}</textarea>
+            <textarea class="form-control mb-3" name="content" rows="3" placeholder="ここにメモを入力">{{ $edit_memo['content'] }}</textarea>
         </div>
     @error('content')
         <div class="alert alert-danger">メモ内容を入力してください！</div>
