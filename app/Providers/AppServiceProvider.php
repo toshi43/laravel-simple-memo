@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
             //自分のメモ取得はMemoモデルに任せる
             //インスタンス化
             $memo_model = new Memo();
-            //メモ取得aa
+            //メモ取得
 
             $request = request();
             $folder_id = $request->input('folder_id');
