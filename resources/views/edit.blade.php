@@ -8,7 +8,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between">
         メモ編集
-        <form id="delete-form" action="{{ route('destory') }}" method="POST">
+        <form id="delete-form" action="{{ route('destroy') }}" method="POST">
             @csrf
             <input type="hidden"  name="memo_id" value="{{ $edit_memo['id'] }}" />
             <i class="fas fa-trash mr-3" onclick="deleteHandle(event);"></i>
@@ -16,7 +16,6 @@
     </div>
     <form class="card-body  my-card-body" action="{{ route('update') }}" method="POST">
         @csrf
-
         <!-- フォルダー選択プルダウン 初期値 -->
        <div class="form-group">
             <select class="form-control mb-3" name="selectfolder_id">
@@ -30,7 +29,7 @@
 
         
 
-        <input type="hidden"  name="memo_id" value="{{ $edit_memo['id']}}" />
+        <input type="hidden"  name="memo_id" value="{{ $edit_memo['id'] }}" />
         <div class="form-group">
             <textarea class="form-control mb-3" name="content" rows="3" placeholder="ここにメモを入力">{{ $edit_memo['content'] }}</textarea>
         </div>

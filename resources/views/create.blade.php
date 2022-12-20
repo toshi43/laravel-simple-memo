@@ -9,7 +9,6 @@
         <div class="form-group">
             <select class="form-control mb-3" name="selectfolder_id" placeholder="">
                 @foreach ($folders as $folder)
-                    <option hidden>フォルダを選択</option>
                     <option value="{{ $folder->id }}">{{ $folder->title }}</option>
                 @endforeach
             </select>

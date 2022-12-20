@@ -42,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
                 $memos = $memo_model->where('user_id', '=', \Auth::id())->get();
             }
             
+
     
             $current_folder = Folder::find($folder_id);
             // $memos = Memo::where('folder_id', $current_folder->id)->get();
