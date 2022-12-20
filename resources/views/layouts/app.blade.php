@@ -87,15 +87,14 @@
                             <a href="{{ route('folders/formcreate') }}" class="btn-block"><i class="fas fa-folder"></i></a>
                         </div>
                         <div class="card-body my-card-body">
-                                <a href="/" class = "card-text d-block mb-3">全て表示</a>
-                            {{-- @foreach($folders as $folder) --}}
+                                <a href="/" class = "card-text d-block mb-3">全てのメモ</a>
+                            @foreach($folders as $folder)
                             <div class="fokder-list d-flex justify-content-between" method="POST">
                                 <a href="/?folder_id={{$folder['id']}}" class="list-group-item elipsis mb-3">{{ $folder['title'] }}</a>
-                                {{-- <form id="folderdelete-form" action="{{ route('folderdestroy',['folder_id'=>$folder->'id']) }}" method="POST"> --}}
                                 <a href="/folders/{{$folder['id']}}/edit"><i class="fas fa-edit"></i></a>
                                 </form>
                             </div>
-                            {{-- @endforeach --}}
+                            @endforeach
                         </div>
                     </div>
                 </div>                

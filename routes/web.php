@@ -22,10 +22,13 @@ Route::get('{/home', [HomeController::class, 'index'])->name('home');
 Route::post('/store', [HomeController::class, 'store'])->name('store');
 Route::get('/edit/{id}', [HomeController::class, 'edit'])->name('edit');
 Route::post('/update', [HomeController::class, 'update'])->name('update');
-Route::post('/destory', [HomeController::class, 'destory'])->name('destory');
+Route::post('/destroy', [HomeController::class, 'destroy'])->name('destroy');
 Route::get('/folders/create', [FolderController::class, 'showCreateForm'])->name('folders/formcreate');
 Route::post('/folders/create', [FolderController::class, 'create']);
 Route::get('/folders/{folder_id}/edit', [HomeController::class, 'folderedit'])->name('folderedit');
-Route::post('/folders/{folder_id}/update', [HomeController::class, 'folderupdate'])->name('folderupdate');
-//Route::post('/folder_id/destroy',[HomeController::class, 'folderdestroy'])->name('folderdestroy');
+Route::post('/folders/{folder_id}/update', [FolderController::class, 'update'])->name('folderupdate');
+Route::post('/folders/{folder_id}/destroy',[FolderController::class, 'destroy'])->name('folderdestroy');
 //Route::get('/folders/{id}', [HomeController::class, 'folders'])->name('folders.index');
+
+
+//destory

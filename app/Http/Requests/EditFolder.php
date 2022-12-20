@@ -26,6 +26,7 @@ class EditFolder extends FormRequest
     public function rules()
     {
         // return $rule
-        
     }
+
+
 }
