@@ -27,8 +27,6 @@ class FolderController extends Controller
         $folder->user_id=\Auth::id();
         $folder->save();
 
-
-        
         return redirect()->route('index' , [
             'id' => $folder->id
         ]);

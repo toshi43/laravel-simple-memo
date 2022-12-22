@@ -28,6 +28,7 @@ Route::post('/folders/create', [FolderController::class, 'create']);
 Route::get('/folders/{folder_id}/edit', [HomeController::class, 'folderedit'])->name('folderedit');
 Route::post('/folders/{folder_id}/update', [FolderController::class, 'update'])->name('folderupdate');
 Route::post('/folders/{folder_id}/destroy',[FolderController::class, 'destroy'])->name('folderdestroy');
+
 //Route::get('/folders/{id}', [HomeController::class, 'folders'])->name('folders.index');
 
 
