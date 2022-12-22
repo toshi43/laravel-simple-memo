@@ -39,6 +39,14 @@
 
                     </ul>
 
+                    <!-- 検索機能 -->
+                    <form class="form-inline d-flex justify-content-between" id="search-form" method="GET" action="{{ route('index') }}">
+                        <input class="form-control mr-sm-2" id="search-input" type="search" name="search" placeholder="メモを検索" value="{{ isset($word) ? $word : '' }}">
+                        <input class="d-none" type="search" value="{{ request()->folder_id ?? null }}">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">検索</button>
+                    </form>
+                    <!-- 検索機能ここまで -->
+
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->

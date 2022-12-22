@@ -10,6 +10,10 @@ class Memo extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $table = 'memos';
+    protected $fillable = ['content'];
+    
+
     // 1対多の逆所属で取得
     public function folder()
     {
@@ -45,10 +49,10 @@ class Memo extends Model
         }
         
 
-
         $memos = $query->get();
 
         return $memos;
     
     }
+
 }

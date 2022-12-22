@@ -34,16 +34,28 @@ class AppServiceProvider extends ServiceProvider
             $memo_model = new Memo();
             //メモ取得
 
+
             $request = request();
+
             $folder_id = $request->input('folder_id');
+            // フォルダIDの有無で絞り込み
             if($folder_id){
-                $memos = Folder::find($folder_id)->memos;
+                $memos = Folder::find($folder_id)->memos();
             } else {
                 $memos = $memo_model->where('user_id', '=', \Auth::id())->get();
+                $memos = Memo::where('user_id', '=', \Auth::id())
+                ->whereNull('deleted_at')
+                ->orderBy('id', 'DESC');
             }
-            
+            // 検索ワードで絞込
+            $word = $request->search;
+            if($word){
+                $memos = $memos->where('content', 'like', '%'.$word.'%')->get();
+            } else {
+                $memos = $memos->get();
+            }
 
-    
+            
             $current_folder = Folder::find($folder_id);
             // $memos = Memo::where('folder_id', $current_folder->id)->get();
 
@@ -51,6 +63,8 @@ class AppServiceProvider extends ServiceProvider
                 ->whereNull('deleted_at')
                 ->orderBy('id', 'DESC')
                 ->get();
+
+            
 
             $view ->with('memos', $memos)->with('tags', $tags);
         });

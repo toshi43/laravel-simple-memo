@@ -42,28 +42,29 @@ class HomeController extends Controller
             ->get();
         
         $folder_id = $request->input('folder_id');
-        // $memos = Folder::find($folder_id)->memos;
-
-        //Log::info($folder_id);
-        //$current_folder = Folder::find($folder_id);
-        //選ばれたフォルダに紐づくタスクを取得する
-        //$memos = Memo::where('folder_id', $current_folder->id)->get();
         
+        //* 検索機能 *//
 
-        //folder_idがNullの場合
+       // 検索したキーワード
+       $word = $request->search;
 
-        // if($current_folder === null) {
-        //     return redirect( route('home') );
-        // }
-
-
-
-        return view('create', compact('tags' , 'folders'
-
-        
-        ));
+       // 検索フォームに文字が入力されているか判定
+       if (!is_null($word)) {
+        // $wordの値がある→nullではない→検索フォームに何かしら入力されている
+        // キーワードをもとに、部分一致するイベントを取得
+        $memos = Memo::where('user_id', '=', \Auth::id())
+            ->whereNull('deleted_at')
+            ->where('content', 'like', '%'.$word.'%')
+            ->orderBy('id', 'DESC')
+            ->get();
+        } else {
+        // $wordの値がない→null→検索フォームに何も入力されていない、つまり初期状態
+        // Eloquentでeventsテーブルにあるデータを全て取得
+        $memos = Memo::get();
     }
-
+        /* 検索機能ここまで */
+        return view('create', compact('tags', 'folders', 'memos'));
+    }
     public function store(Request $request)
     {
         $posts = $request->all();
@@ -77,9 +78,9 @@ class HomeController extends Controller
             $tag_exists = Tag::where('user_id' ,'=' , \Auth::id())->where('name', '=', $posts['new_tag'])
             ->exists();
             
-           // Memo::insert(['folder_id' => $folder_id]);
-        //新規タグが入力されているかチェック
-        //新規タグが既にtagsテーブルに存在するかのチェック
+            // Memo::insert(['folder_id' => $folder_id]);
+            //新規タグが入力されているかチェック
+            //新規タグが既にtagsテーブルに存在するかのチェック
             if( !empty($posts['new_tag']) && !$tag_exists ){
                 //新規タグが既に存在しなければ、tagsテーブルにインサート→IDを取得
                 $tag_id = Tag::insertGetId(['user_id' => \Auth::id(), 'name' => $posts['new_tag']]);
@@ -93,11 +94,6 @@ class HomeController extends Controller
                 }
             }
         });
-
-        // return view('create', compact('folders'
-        // [
-        //      $folder = Folder::find($folder_id)
-        //  ]));
        
         return redirect( route('home') );
     }
@@ -106,15 +102,6 @@ class HomeController extends Controller
     {
         $edit_memo = Memo::find($id);
         
-
-        // $edit_memo = Memo::select('memos.*', 'tags.id AS tag_id')
-        //     ->leftJoin('memo_tags', 'memo_tags.memo_id', '=', 'memos.id')
-        //     ->leftJoin('tags', 'memo_tags.tag_id', '=', 'tags.id')
-        //     ->where('memos.user_id', '=', \Auth::id())
-        //     ->where('memos.id', '=', $id)
-        //     ->whereNull('memos.deleted_at')
-        //     ->get();
-
         //リレーションで取得
         $tags = $edit_memo->tags;
         $include_folder = $edit_memo->folder;
@@ -190,5 +177,6 @@ class HomeController extends Controller
         
         return view('folders/folderedit', compact('folder', 'folders', 'edit_folder' , 'edit_memo'));
     }
+
 
 }
